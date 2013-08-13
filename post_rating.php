@@ -1,7 +1,7 @@
 <?php
 
 	/*
-	Plugin Name: Mark Post
+	Plugin Name: Post Rating
 	Description: Allows a post to be marked
 	Version: 0.1
 	*/
