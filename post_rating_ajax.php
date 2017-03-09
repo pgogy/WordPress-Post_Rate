@@ -18,21 +18,39 @@ class post_rate_ajax {
 	function mark_post_submit(){
 
 		if(wp_verify_nonce($_REQUEST['nonce'], 'mark_post_nonce')){
+		
+			$user = wp_get_current_user();
 			
-			add_post_meta($_POST['id'], "post_rating_score", $_POST['mark']);
-		
-		}
-		
-		$feedback = get_post_meta($_POST['id'], "post_feedback");
-		
-		if(isset($feedback[0]) && $feedback[0]!=""){
-		
-			echo $feedback[0];
-		
-		}else{
-		
-			echo "Thank you";
-		
+			if($user->ID!==0){
+			
+				update_post_meta($_POST['id'], "post_rate_user_" . $user->ID , $_POST['mark']);
+			
+			}else{
+			
+				add_post_meta($_POST['id'], "post_rating_score", $_POST['mark']);
+			
+			}
+			
+			$feedback = get_post_meta($_POST['id'], "post_feedback");
+			
+			if(isset($feedback[0]) && $feedback[0]!=""){
+			
+				echo $feedback[0];
+			
+			}else{
+			
+				$feedback = get_option("post_rating_feedback");
+					
+				if($feedback=="" || $feedback === FALSE){
+				
+					$feedback = __("Thank you");
+				
+				}
+				
+				echo $feedback;
+			
+			}
+					
 		}
 		
 		die();

@@ -6,6 +6,7 @@ Tested up to: 3.6
 Stable tag: 0.1
 
 Allows an author to allow people to provide feedback on a post
+Feedback options can be customised using code
 
 == Description ==
 

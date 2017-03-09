@@ -17,7 +17,7 @@ class post_rating_post_display {
 		$message = get_post_meta($post->ID, "post_message");
 		$button = get_post_meta($post->ID, "post_button");
 
-		if($rating[0]=="true"){
+		if($rating[0]=="true" || get_option("post_rating_all") == "on"){
 
 			if($post->post_type=="post"){
 			
@@ -27,7 +27,13 @@ class post_rating_post_display {
 				
 				}else{
 				
-					$message = "Give this post a grade / mark out of ten, or provide a comment below";
+					$message = get_option("post_rating_message");
+					
+					if($message=="" || $message === FALSE){
+					
+						$message = __("Give this post a grade / mark out of ten, or provide a comment below");
+					
+					}
 			
 				}
 				
@@ -37,8 +43,14 @@ class post_rating_post_display {
 				
 				}else{
 				
-					$button = "Rate Post";
-			
+					$button = get_option("post_rating_label");
+					
+					if($button=="" || $button === FALSE){
+					
+						$button = __("Rate Post");
+					
+					}
+				
 				}
 
 				?><div id='mark_post'>
@@ -56,12 +68,26 @@ class post_rating_post_display {
 					$custom_fields = get_post_custom($post->ID);
 					$my_custom_field = $custom_fields['post_rating_score'];
 					$output = "";
-					  foreach ( $my_custom_field as $key => $value )
-						$output .= $value . ",";
+					if($my_custom_field){
+						foreach ( $my_custom_field as $key => $value ){
+							$output .= __("Anonymous rated as") . " " . $value . ",";
+						}
+					}
+					
+					$blogusers = get_users();
+					foreach ( $blogusers as $user ) {
+						$rate = get_post_meta($post->ID, "post_rate_user_" . $user->ID, true);
+						if($rate==""){
+							$rate = __("hasn't rated");
+						}else{
+							$rate = __("rated as") . " " . $rate;
+						}
+						$output .= esc_html( $user->display_name ) . " " . $rate . ",";
+					}
 					
 					if($output!=""){
 					
-						echo "<div id='feedback'><p>Feedback so far</p><p>" . substr($output,0,-1) . "</p></div>";
+						echo "<div id='feedback'><p>" . __("Feedback so far") . "</p><p>" . substr($output,0,-1) . "</p></div>";
 					
 					}
 					

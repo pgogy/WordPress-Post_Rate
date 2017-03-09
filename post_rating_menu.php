@@ -32,19 +32,31 @@ class post_rating_menu{
 	
 	function save_post($post_id){
 		
-		if($_POST['post_rating_on']=="on"){
-			
-			update_post_meta($post_id, "post_rating", "true");
-			
-		}else{
+		if(isset($_POST)){
 		
-			update_post_meta($post_id, "post_rating", "false");
-		
+			if(isset($_POST['action'])){
+			
+				if($_POST['action']=="editpost"){
+			
+					if($_POST['post_rating_on']=="on"){
+					
+						update_post_meta($post_id, "post_rating", "true");
+					
+					}else{
+				
+						update_post_meta($post_id, "post_rating", "false");
+				
+					}
+				
+					update_post_meta($post_id, "post_message", $_POST['post_message']);
+					update_post_meta($post_id, "post_button", $_POST['post_button']);
+					update_post_meta($post_id, "post_feedback", $_POST['post_feedback']);
+				
+				}
+			
+			}
+			
 		}
-		
-		update_post_meta($post_id, "post_message", $_POST['post_message']);
-		update_post_meta($post_id, "post_button", $_POST['post_button']);
-		update_post_meta($post_id, "post_feedback", $_POST['post_feedback']);
 
 	}
 
